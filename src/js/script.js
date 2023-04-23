@@ -52,9 +52,17 @@
                 event.preventDefault();
 
                 bookImage.classList.add('favorite');
+                // console.log(bookImage)
 
                 let bookImageDataId = bookImage.getAttribute('data-id');
                 favouriteBooks.push(bookImageDataId);
+
+                if (bookImage.classList.contains('favorite')) {
+                    bookImage.addEventListener('dblclick', function (event) {
+                        event.preventDefault();
+                        bookImage.classList.remove('favorite');
+                    })
+                }
             })
         }
     }
