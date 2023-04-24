@@ -38,33 +38,33 @@
         }
     }
 
-    const favouriteBooks = [];
+    const favoriteBooks = [];
 
     function initActions() {
 
+        // find place where the whole book list is
+        const booksListContainer = document.querySelector(select.containerOf.bookList);
 
-        const booksImageContainer = document.querySelectorAll(select.containerOf.bookImage);
-
-
-        for (const bookImage of booksImageContainer) {
-
-            bookImage.addEventListener('dblclick', function (event) {
-                event.preventDefault();
-
-                bookImage.classList.add('favorite');
-                // console.log(bookImage)
-
-                let bookImageDataId = bookImage.getAttribute('data-id');
-                favouriteBooks.push(bookImageDataId);
-
-                if (bookImage.classList.contains('favorite')) {
-                    bookImage.addEventListener('dblclick', function (event) {
-                        event.preventDefault();
-                        bookImage.classList.remove('favorite');
-                    })
+        // add dbclick listener to booksListContainer
+        booksListContainer.addEventListener('dblclick', function (event) {
+            event.preventDefault();
+            // use offsetParent property
+            const clickedElement = event.target.offsetParent;
+            // check if clickedElement is a book
+            if (clickedElement.classList.contains('book__image')) {
+                // check data-id for book
+                const bookId = clickedElement.getAttribute('data-id');
+                // add 'favorite' class if there is not 'favorite' class and remove 'favorite' class if there is 'favorite' class
+                clickedElement.classList.toggle('favorite');
+                if (clickedElement.classList.contains('favorite')) {
+                    favoriteBooks.push(bookId);
                 }
-            })
-        }
+                else {
+                    favoriteBooks.pop(bookId);
+                }
+            }
+        })
+
     }
     render();
     initActions();
