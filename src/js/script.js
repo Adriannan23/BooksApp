@@ -9,7 +9,9 @@
             bookList: '.books-list',
             bookImage: '.books-list .book__image',
             // bookImageId: '.books-list '
-        }
+        },
+        filters: '.filters',
+
     }
 
     const templates = {
@@ -40,6 +42,12 @@
 
     const favoriteBooks = [];
 
+    // in this tab, we will store information on which filter is now selected
+    const filters = [];
+
+    // in the filterForm, there are two labels -'adults only' and 'non-fiction'
+    const filterForm = document.querySelector(select.filters);
+
     function initActions() {
 
         // find place where the whole book list is
@@ -66,6 +74,66 @@
         })
 
     }
+
+    filterForm.addEventListener('click', function (event) {
+
+        if (event.target.tagName == 'INPUT' && event.target.type == 'checkbox' && event.target.name == 'filter') {
+            // console.log(event.target.value)
+            if (event.target.checked) {
+                filters.push(event.target.value);
+            }
+            else {
+                const indexOfFilter = filters.indexOf(event.target.value);
+                filters.splice(indexOfFilter, 1);
+            }
+
+        }
+        showFilteredBooks();
+    })
+
+    function showFilteredBooks() {
+
+
+
+
+        for (const book of dataSource.books) {
+
+            let shouldBeHidden = false;
+            for (const filter of filters) {
+                if (!book.details[filter]) {
+                    shouldBeHidden = true;
+                    break;
+                    // jesli ta ksiazka nie pasuje do filtrow, jest chowana
+
+                }
+
+            }
+
+
+            const bookImages = document.querySelectorAll('.book__image');
+
+
+            if (shouldBeHidden) {
+                for (image of bookImages) {
+                    if (book.id == image.getAttribute('data-id')) {
+                        image.classList.add('hidden')
+                        // console.log(image)
+                    }
+                }
+            }
+
+            else {
+                for (const image of bookImages) {
+                    if (book.id == image.getAttribute('data-id')) {
+                        image.classList.remove('hidden');
+
+                    }
+                }
+            }
+        }
+
+    }
+
     render();
     initActions();
 }
