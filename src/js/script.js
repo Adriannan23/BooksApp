@@ -1,6 +1,7 @@
 {
     'use strict';
 
+
     const select = {
         templateOf: {
             book: '#template-book',
@@ -16,7 +17,9 @@
 
     const templates = {
         book: Handlebars.compile(document.querySelector(select.templateOf.book).innerHTML),
-    }
+    };
+
+
 
     function render() {
 
@@ -26,6 +29,12 @@
 
         // go through every book in the dataSource.books
         for (let book of dataSource.books) {
+
+            const ratingBgc = determineRatingBgc(book.rating);
+            book.ratingBgc = ratingBgc;
+
+            const ratingWidth = book.rating * 10;
+            book.ratingWidth = ratingWidth;
             // console.log('book:', book)
 
             /* generate HTML code based on 'book' template */
@@ -93,9 +102,6 @@
 
     function showFilteredBooks() {
 
-
-
-
         for (const book of dataSource.books) {
 
             let shouldBeHidden = false;
@@ -134,6 +140,26 @@
 
     }
 
+
+    function determineRatingBgc(value) {
+
+        for (let data of dataSource.books) {
+            if (value == data.rating && data.rating < 6) {
+                return 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)';
+            }
+            else if (value == data.rating && data.rating > 6 && data.rating <= 8) {
+                return 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%)';
+            }
+            else if (value == data.rating && data.rating > 8 && data.rating <= 9) {
+                return 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)';
+            }
+            else if (value == data.rating && data.rating > 9) {
+                return 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)';
+            }
+        }
+    }
+
     render();
     initActions();
+
 }
